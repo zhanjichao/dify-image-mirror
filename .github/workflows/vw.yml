@@ -1,0 +1,33 @@
+name: Sync VW images to ACR(Alibaba Cloud Container Registry)
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+env:
+  ACR_REGISTRY: crpi-e2bvudnudvi04hc8.cn-hangzhou.personal.cr.aliyuncs.com
+
+jobs:
+  pull-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Login to the ACR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Pull vaultwarden image from Docker Hub
+        run: docker pull vaultwarden/server:latest
+
+      - name: Tag vaultwarden image for ACR
+        run: docker tag vaultwarden/server:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden:latest
+
+      - name: Push vaultwarden image to Aliyun Registry
+        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden:latest
