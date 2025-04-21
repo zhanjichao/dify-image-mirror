@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ACR_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+  ACR_REGISTRY: crpi-e2bvudnudvi04hc8.cn-hangzhou.personal.cr.aliyuncs.com
 
 jobs:
   pull-and-push:
