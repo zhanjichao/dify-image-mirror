@@ -103,12 +103,3 @@ jobs:
 
       - name: Push nginx image to Aliyun Registry
         run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/nginx:latest
-
-      - name: Pull vaultwarden image from Docker Hub
-        run: docker pull vaultwarden/server:latest
-
-      - name: Tag vaultwarden image for ACR
-        run: docker tag vaultwarden/server:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden/server:latest
-
-      - name: Push vaultwarden image to Aliyun Registry
-        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden/server:latest
