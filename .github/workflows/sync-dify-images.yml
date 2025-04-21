@@ -77,6 +77,15 @@ jobs:
       - name: Push dify sandbox image to Aliyun Registry
         run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/dify-sandbox:latest
 
+      - name: Pull dify dify-plugin-daemon image from Docker Hub
+        run: docker pull langgenius/dify-plugin-daemon:latest
+
+      - name: Tag dify dify-plugin-daemon image for ACR
+        run: docker tag langgenius/dify-plugin-daemon:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/dify-plugin-daemon:latest
+
+      - name: Push dify dify-plugin-daemon image to Aliyun Registry
+        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/dify-plugin-daemon:latest
+
       - name: Pull squid image from Docker Hub
         run: docker pull ubuntu/squid:latest
 
