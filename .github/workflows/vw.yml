@@ -31,3 +31,12 @@ jobs:
 
       - name: Push vaultwarden image to Aliyun Registry
         run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden:latest
+
+      - name: Pull Caddy image from Docker Hub
+        run: docker pull caddy:latest
+
+      - name: Tag Caddy image for ACR
+        run: docker tag caddy:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/caddy:latest
+
+      - name: Push Caddy image to Aliyun Registry
+        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/caddy:latest
