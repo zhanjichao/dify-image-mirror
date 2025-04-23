@@ -1,12 +1,9 @@
-name: Sync VW images to ACR(Alibaba Cloud Container Registry)
+name: Sync Bitwarden images to ACR(Alibaba Cloud Container Registry)
 
 on:
   schedule:
     - cron: '0 1 * * *'
   workflow_dispatch:
-
-env:
-  ACR_REGISTRY: crpi-e2bvudnudvi04hc8.cn-hangzhou.personal.cr.aliyuncs.com
 
 jobs:
   pull-and-push:
@@ -19,24 +16,15 @@ jobs:
       - name: Login to the ACR
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.ACR_REGISTRY }}
+          registry: ${{ secrets.ACR_REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Pull vaultwarden image from Docker Hub
-        run: docker pull vaultwarden/server:latest
+      - name: Pull bitwarden image from ghcr
+        run: docker pull ghcr.io/bitwarden/self-host:beta
 
-      - name: Tag vaultwarden image for ACR
-        run: docker tag vaultwarden/server:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden:latest
+      - name: Tag bitwarden image for ACR
+        run: docker tag ghcr.io/bitwarden/self-host:beta ${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/bitwarden:beta
 
-      - name: Push vaultwarden image to Aliyun Registry
-        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/vaultwarden:latest
-
-      - name: Pull Caddy image from Docker Hub
-        run: docker pull caddy:latest
-
-      - name: Tag Caddy image for ACR
-        run: docker tag caddy:latest ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/caddy:latest
-
-      - name: Push Caddy image to Aliyun Registry
-        run: docker push ${{ env.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/caddy:latest
+      - name: Push bitwarden image to Aliyun Registry
+        run: docker push ${{ secrets.ACR_REGISTRY }}/${{ secrets.ACR_NAMESPACE }}/bitwarden:beta
